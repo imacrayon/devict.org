@@ -1,0 +1,11 @@
+<h1>
+    <%= @video.title %>
+</h1>
+<p>
+    By <%= @video.author %>, Published <%= l @video.published_at, :format => :date %>.
+    <%= link_to "Back to Videos", "/videos" %>
+</p>
+
+<div class="video">
+  <iframe title="<%= @video.title %>" src="https://www.youtube.com/embed/<%= @video.ytID %>?wmode=transparent" frameborder="0" allowfullscreen></iframe>
+</div>

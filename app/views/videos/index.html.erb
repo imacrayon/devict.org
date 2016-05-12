@@ -1,0 +1,18 @@
+<div class="small-12 columns">
+  <h1>Video Presentations</h1>
+
+  <div class="row">
+  <% @videos.each do |video| %>
+    <div class="columns small-12 medium-6 large-3">
+      <%= link_to video do %>
+          <img width="100%" src="<%= video.image %>" />
+          <%= video.title %>
+      <% end %>
+      <p>
+      <%= video.author %>, <%= l video.published_at, :format => :date %>
+      </p>
+    </div>
+  <% end %>
+  </div>
+  <%= paginate @videos %>
+</div>

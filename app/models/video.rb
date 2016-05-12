@@ -1,19 +1,31 @@
+require 'httparty'
+
+class YouTube
+  include HTTParty
+  format :json
+
+  # Disable SSL verification. I had this problem when I was doing local
+  # development and I figure... meh?
+  default_options.update(verify: false)
+end
+
 class Video < ActiveRecord::Base
-  attr_accessible :guid, :content, :link, :title, :published_at
+  attr_accessible :ytID, :title, :author, :published_at
 
-  def self.update_videos
-    feed = Feedzirra::Feed.fetch_and_parse("https://gdata.youtube.com/feeds/api/playlists/PLLV_XLUgRXpyeqm5l_q0a4wx0ngt2fziR")
+  def self.add ytID
+    key = ENV["YT_KEY"]
+    data = YouTube.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=#{ytID}&key=#{key}")
+    snippet = data["items"][0]["snippet"]
 
-    feed.entries.each do |entry|
-      unless Video.exists? :guid => entry.id
-        Video.create({
-          :title        => entry.title,
-          :content      => entry.content,
-          :published_at => entry.published,
-          :link         => entry.image,
-          :guid         => entry.id
-        })
-      end
-    end
+    Video.create({
+      :ytID         => ytID,
+      :title        => snippet["title"],
+      :author       => snippet["channelTitle"],
+      :published_at => snippet["publishedAt"],
+    })
+  end
+
+  def image
+    "https://i.ytimg.com/vi/#{ytID}/hqdefault.jpg"
   end
 end
