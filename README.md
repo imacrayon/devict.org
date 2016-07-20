@@ -1,3 +1,12 @@
+# Deprecated!
+
+The Rails version of this site is no longer being used. This branch is kept
+only for posterity.
+
+See the `master` branch for the current version.
+
+---
+
 # devict.org
 
 The web home for DevICT
